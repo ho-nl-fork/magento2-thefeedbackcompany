@@ -16,12 +16,12 @@ use Magento\Framework\App\Cache\TypeListInterface;
 
 class Reviews extends AbstractHelper
 {
-
     const XML_PATH_REVIEWS_ENABLED = 'magmodules_thefeedbackcompany/reviews/enabled';
     const XML_PATH_REVIEWS_CLIENT_ID = 'magmodules_thefeedbackcompany/api/client_id';
     const XML_PATH_REVIEWS_CLIENT_SECRET = 'magmodules_thefeedbackcompany/api/client_secret';
     const XML_PATH_REVIEWS_CLIENT_TOKEN = 'magmodules_thefeedbackcompany/api/client_token';
     const XML_PATH_REVIEWS_RESULT = 'magmodules_thefeedbackcompany/reviews/result';
+    const XML_PATH_REVIEWS_RESULT_SUCCESS = 'magmodules_thefeedbackcompany/reviews/result_success';
     const XML_PATH_REVIEWS_LAST_IMPORT = 'magmodules_thefeedbackcompany/reviews/last_import';
     const REVIEWS_URL = 'https://beoordelingen.feedbackcompany.nl/api/v1/review/all/';
 
@@ -152,11 +152,14 @@ class Reviews extends AbstractHelper
                 $fbcData[$key]['score'] = number_format((float)$row['review_summary']['merchant_score'], 1, '.', '');
                 $fbcData[$key]['score_max'] = $row['review_summary']['max_score'];
                 $fbcData[$key]['percentage'] = ($row['review_summary']['merchant_score'] * 10) . '%';
+
+                $this->general->setConfigData(json_encode($fbcData), self::XML_PATH_REVIEWS_RESULT_SUCCESS);
             } else {
                 $fbcData[$key]['status'] = $status;
                 $fbcData[$key]['msg'] = $row['msg'];
             }
         }
+
         $updateMsg = $this->datetime->gmtDate() . ' (' . $type . ').';
         $this->general->setConfigData(json_encode($fbcData), self::XML_PATH_REVIEWS_RESULT);
         $this->general->setConfigData($updateMsg, self::XML_PATH_REVIEWS_LAST_IMPORT);
@@ -228,7 +231,7 @@ class Reviews extends AbstractHelper
      */
     public function getAllSummaryData()
     {
-        return json_decode($this->general->getStoreValue(self::XML_PATH_REVIEWS_RESULT), true);
+        return json_decode($this->general->getStoreValue(self::XML_PATH_REVIEWS_RESULT_SUCCESS), true);
     }
 
     /**
