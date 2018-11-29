@@ -76,7 +76,7 @@
                     <comment>Login to https://beheer.feedbackcompany.nl and navigate to "My Account" (Mijn Account). You will find the field: "Connectorcode". Copy and paste this number to this field.</comment>
                     <depends><field id="enabled">1</field></depends>
                 </field>
-                <field id="status" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="status" translate="label" type="select" sortOrder="3" showInDefault="1" canRestore="1">
                     <label>Status</label>
                     <source_model>Magmodules\TheFeedbackCompany\Model\System\Config\Source\Status</source_model>
                     <comment>Select the status when the order is ready to be sent to The Feedback Company.</comment>
